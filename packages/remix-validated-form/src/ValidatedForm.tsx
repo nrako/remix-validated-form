@@ -50,10 +50,7 @@ export type FormProps<DataType> = {
    * A submit callback that gets called when the form is submitted
    * after all validations have been run.
    */
-  onSubmit?: (
-    data: DataType,
-    event: React.FormEvent<HTMLFormElement>
-  ) => void | Promise<void>;
+  onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void | Promise<void>;
   /**
    * Allows you to provide a `fetcher` from remix's `useFetcher` hook.
    * The form will use the fetcher for loading states, action data, etc
@@ -306,14 +303,12 @@ export function ValidatedForm<DataType>({
     nativeEvent: HTMLSubmitEvent["nativeEvent"]
   ) => {
     startSubmit();
-    const submitter = nativeEvent.submitter as HTMLFormSubmitter | null;
-    const formDataToValidate = getDataFromForm(e.currentTarget);
-    if (submitter?.name) {
-      formDataToValidate.append(submitter.name, submitter.value);
-    }
+    const result = await validator.validate(getDataFromForm(e.currentTarget));
 
-    const result = await validator.validate(formDataToValidate);
-    if (result.error) {
+    const submitter = nativeEvent.submitter as HTMLFormSubmitter | null;
+
+    if (!submitter?.formNoValidate && result.error) {
+      endSubmit();
       setFieldErrors(result.error.fieldErrors);
       endSubmit();
       if (!disableFocusOnError) {
@@ -326,7 +321,7 @@ export function ValidatedForm<DataType>({
     } else {
       setFieldErrors({});
       const eventProxy = formEventProxy(e);
-      await onSubmit?.(result.data, eventProxy);
+      await onSubmit?.(eventProxy);
       if (eventProxy.defaultPrevented) {
         endSubmit();
         return;
