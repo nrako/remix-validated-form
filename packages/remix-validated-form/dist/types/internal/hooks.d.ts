@@ -1,0 +1,35 @@
+import { FieldErrors, ValidationErrorResponseData } from "..";
+import { InternalFormContextValue } from "./formContext";
+import { Hydratable } from "./hydratable";
+import { InternalFormId } from "./state/types";
+export declare const useInternalFormContext: (formId?: string | symbol | undefined, hookName?: string | undefined) => InternalFormContextValue;
+export declare function useErrorResponseForForm({ fetcher, subaction, formId, }: InternalFormContextValue): ValidationErrorResponseData | null;
+export declare const useFieldErrorsForForm: (context: InternalFormContextValue) => Hydratable<FieldErrors | undefined>;
+export declare const useDefaultValuesFromLoader: ({ formId, }: InternalFormContextValue) => any;
+export declare const useDefaultValuesForForm: (context: InternalFormContextValue) => Hydratable<{
+    [fieldName: string]: any;
+}>;
+export declare const useHasActiveFormSubmit: ({ fetcher, }: InternalFormContextValue) => boolean;
+export declare const useFieldTouched: (field: string, { formId }: InternalFormContextValue) => readonly [boolean, (touched: boolean) => void];
+export declare const useFieldError: (name: string, context: InternalFormContextValue) => string | undefined;
+export declare const useClearError: (context: InternalFormContextValue) => (field: string) => void;
+export declare const useCurrentDefaultValueForField: (formId: InternalFormId, field: string) => any;
+export declare const useFieldDefaultValue: (name: string, context: InternalFormContextValue) => any;
+export declare const useInternalIsSubmitting: (formId: InternalFormId) => boolean;
+export declare const useInternalIsValid: (formId: InternalFormId) => boolean;
+export declare const useInternalHasBeenSubmitted: (formId: InternalFormId) => boolean;
+export declare const useValidateField: (formId: InternalFormId) => (fieldName: string) => Promise<string | null>;
+export declare const useValidate: (formId: InternalFormId) => () => Promise<import("..").ValidationResult<unknown>>;
+export declare const useRegisterReceiveFocus: (formId: InternalFormId) => (fieldName: string, handler: () => void) => () => void;
+export declare const useSyncedDefaultValues: (formId: InternalFormId) => {
+    [fieldName: string]: any;
+};
+export declare const useSetTouched: ({ formId }: InternalFormContextValue) => (field: string, touched: boolean) => void;
+export declare const useTouchedFields: (formId: InternalFormId) => import("..").TouchedFields;
+export declare const useFieldErrors: (formId: InternalFormId) => FieldErrors;
+export declare const useSetFieldErrors: (formId: InternalFormId) => (errors: FieldErrors) => void;
+export declare const useResetFormElement: (formId: InternalFormId) => () => void;
+export declare const useSubmitForm: (formId: InternalFormId) => () => void;
+export declare const useFormActionProp: (formId: InternalFormId) => string | undefined;
+export declare const useFormSubactionProp: (formId: InternalFormId) => string | undefined;
+export declare const useFormValues: (formId: InternalFormId) => () => FormData;
